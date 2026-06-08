@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Scheduling - Grand Luxury Hotel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-hotel"></i> Grand Luxury Hotel
+            </a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/rooms">Rooms</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/bookings">Bookings</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/scheduling">Task Scheduling</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5 pt-5">
+        <h1 class="mb-4">Hotel Task Scheduling</h1>
+        
+        <!-- Add Task Form -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Add New Task</h5>
+            </div>
+            <div class="card-body">
+                <form id="taskForm">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Task Name</label>
+                            <input type="text" class="form-control" id="taskName" required>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label class="form-label">Burst Time</label>
+                            <input type="number" class="form-control" id="burstTime" min="1" required>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label class="form-label">Priority</label>
+                            <input type="number" class="form-control" id="priority" min="1" required>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label class="form-label">Arrival Time</label>
+                            <input type="number" class="form-control" id="arrivalTime" min="0" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Task Type</label>
+                            <select class="form-select" id="taskType" required>
+                                <option value="">Select Type</option>
+                                <option value="HOUSEKEEPING">Housekeeping</option>
+                                <option value="MAINTENANCE">Maintenance</option>
+                                <option value="ROOM_SERVICE">Room Service</option>
+                                <option value="CONCIERGE">Concierge</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-info">Add Task</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Scheduling Controls -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Scheduling Algorithms</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <button class="btn btn-outline-primary w-100" onclick="runScheduling('FCFS')">
+                            <i class="fas fa-list"></i> FCFS
+                        </button>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <button class="btn btn-outline-success w-100" onclick="runScheduling('SJF')">
+                            <i class="fas fa-sort-amount-down"></i> SJF
+                        </button>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <button class="btn btn-outline-warning w-100" onclick="runScheduling('PRIORITY')">
+                            <i class="fas fa-star"></i> Priority
+                        </button>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <button class="btn btn-outline-danger w-100" onclick="runScheduling('ROUNDROBIN')">
+                            <i class="fas fa-sync-alt"></i> Round Robin
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <label for="timeQuantum" class="form-label">Time Quantum (for Round Robin):</label>
+                    <input type="number" id="timeQuantum" class="form-control" value="2" min="1" style="width: 150px;">
+                </div>
+                <button class="btn btn-info mt-3" onclick="compareAlgorithms()">
+                    <i class="fas fa-chart-bar"></i> Compare All Algorithms
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" style="display: none;">
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Scheduling Results</h5>
+                </div>
+                <div class="card-body">
+                    <div id="metricsDisplay"></div>
+                    <div class="table-responsive mt-3">
+                        <table class="table table-bordered" id="resultsTable">
+                            <thead>
+                                <tr>
+                                    <th>Task Name</th>
+                                    <th>Arrival Time</th>
+                                    <th>Burst Time</th>
+                                    <th>Waiting Time</th>
+                                    <th>Turnaround Time</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Section -->
+        <div id="comparisonSection" style="display: none;">
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <h5 class="mb-0">Algorithm Comparison</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="comparisonTable">
+                            <thead>
+                                <tr>
+                                    <th>Algorithm</th>
+                                    <th>Avg Waiting Time</th>
+                                    <th>Avg Turnaround Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="comparisonBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task List -->
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Task List</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Task Name</th>
+                                <th>Burst Time</th>
+                                <th>Priority</th>
+                                <th>Arrival Time</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="taskListBody">
+                            <!-- Tasks will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/script.js}"></script>
+</body>
+</html>
