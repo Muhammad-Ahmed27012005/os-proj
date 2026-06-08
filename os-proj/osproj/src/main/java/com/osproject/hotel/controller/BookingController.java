@@ -17,9 +17,6 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
     
-    @Autowired
-    
-    
     @GetMapping
     public String listBookings(Model model) {
         model.addAttribute("bookings", bookingService.getAllBookings());
