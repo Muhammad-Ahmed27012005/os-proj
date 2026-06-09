@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Performance | Grand Luxury Hotel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold">⚙️ System Performance Dashboard</h1>
+            <p class="lead text-muted">Scheduling algorithm metrics based on real‑time hotel tasks</p>
+            <span class="badge bg-gold px-3 py-2">Using FCFS, SJF, Priority & Round Robin in background</span>
+        </div>
+
+        <div class="row g-4">
+            <!-- FCFS Card -->
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-lg rounded-4 text-center p-3">
+                    <i class="fas fa-list-ol fa-3x text-gold mb-3"></i>
+                    <h4>FCFS</h4>
+                    <p class="small text-muted">First Come First Served</p>
+                    <hr>
+                    <p><strong>Avg Waiting Time</strong><br><span class="fs-2 text-gold" th:text="${fcfs.avgWaitingTime} + ' ms'">0</span></p>
+                    <p><strong>Avg Turnaround</strong><br><span class="fs-5" th:text="${fcfs.avgTurnaroundTime} + ' ms'">0</span></p>
+                </div>
+            </div>
+
+            <!-- SJF Card -->
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-lg rounded-4 text-center p-3">
+                    <i class="fas fa-sort-amount-down-alt fa-3x text-gold mb-3"></i>
+                    <h4>SJF</h4>
+                    <p class="small text-muted">Shortest Job First</p>
+                    <hr>
+                    <p><strong>Avg Waiting Time</strong><br><span class="fs-2 text-gold" th:text="${sjf.avgWaitingTime} + ' ms'">0</span></p>
+                    <p><strong>Avg Turnaround</strong><br><span class="fs-5" th:text="${sjf.avgTurnaroundTime} + ' ms'">0</span></p>
+                </div>
+            </div>
+
+            <!-- Priority Card -->
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-lg rounded-4 text-center p-3">
+                    <i class="fas fa-star fa-3x text-gold mb-3"></i>
+                    <h4>Priority</h4>
+                    <p class="small text-muted">Non‑preemptive</p>
+                    <hr>
+                    <p><strong>Avg Waiting Time</strong><br><span class="fs-2 text-gold" th:text="${priority.avgWaitingTime} + ' ms'">0</span></p>
+                    <p><strong>Avg Turnaround</strong><br><span class="fs-5" th:text="${priority.avgTurnaroundTime} + ' ms'">0</span></p>
+                </div>
+            </div>
+
+            <!-- Round Robin Card -->
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-lg rounded-4 text-center p-3">
+                    <i class="fas fa-redo-alt fa-3x text-gold mb-3"></i>
+                    <h4>Round Robin</h4>
+                    <p class="small text-muted">Time Quantum = 2 ms</p>
+                    <hr>
+                    <p><strong>Avg Waiting Time</strong><br><span class="fs-2 text-gold" th:text="${roundrobin.avgWaitingTime} + ' ms'">0</span></p>
+                    <p><strong>Avg Turnaround</strong><br><span class="fs-5" th:text="${roundrobin.avgTurnaroundTime} + ' ms'">0</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Bar Chart -->
+        <div class="card mt-5 border-0 shadow rounded-4">
+            <div class="card-header bg-transparent">
+                <h5><i class="fas fa-chart-bar text-gold"></i> Algorithm Performance Comparison</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="comparisonChart" height="100"></canvas>
+            </div>
+        </div>
+
+        <div class="alert alert-info mt-4 rounded-4">
+            <i class="fas fa-info-circle"></i> The scheduling algorithms run in the background using actual hotel task data. The metrics above are updated in real time based on current tasks.
+        </div>
+    </div>
+
+    <footer class="text-white py-4 mt-5" style="background: #050608;">
+        <div class="container text-center">
+            <p class="mb-0 small">© 2025 Grand Luxury Hotel – Performance powered by OS scheduling.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Pass metrics from Thymeleaf to JavaScript for chart
+        const fcfsWait = [[${fcfs.avgWaitingTime}]];
+        const sjfWait = [[${sjf.avgWaitingTime}]];
+        const priWait = [[${priority.avgWaitingTime}]];
+        const rrWait = [[${roundrobin.avgWaitingTime}]];
+
+        const ctx = document.getElementById('comparisonChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['FCFS', 'SJF', 'Priority', 'Round Robin'],
+                datasets: [{
+                    label: 'Average Waiting Time (ms)',
+                    data: [fcfsWait, sjfWait, priWait, rrWait],
+                    backgroundColor: '#C5A55A',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'top' }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

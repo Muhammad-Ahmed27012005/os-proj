@@ -5,10 +5,13 @@ package com.osproject.hotel.service;
 import com.osproject.hotel.model.Booking;
 import com.osproject.hotel.model.Room;
 import com.osproject.hotel.repository.BookingRepository;
+
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -19,23 +22,39 @@ public class BookingService {
     @Autowired
     private RoomService roomService;
 
+    // Inside BookingService.java, modify createBooking:
     @Transactional
     public Booking createBooking(Booking booking) {
-        Long roomId = booking.getRoom().getId();
-        Room room = roomService.getRoomById(roomId);
-
+        Room room = roomService.getRoomById(booking.getRoom().getId());
         if (!room.isAvailable()) {
-            throw new RuntimeException("Room is not available for booking");
+            throw new RuntimeException("Room not available");
         }
+        // Calculate total amount
+        long days = java.time.temporal.ChronoUnit.DAYS.between(booking.getCheckInDate(), booking.getCheckOutDate());
+        if (days <= 0)
+            days = 1;
+        booking.setTotalAmount(room.getPricePerNight().multiply(java.math.BigDecimal.valueOf(days)));
 
-        // total amount calculation is omitted because Booking model does not expose check-in/check-out accessors
-
-        // Update room availability
+        booking.setBookingDate(java.time.LocalDate.now());
+        booking.setStatus("CONFIRMED");
         room.setAvailable(false);
         roomService.saveRoom(room);
-
         return bookingRepository.save(booking);
     }
+
+    // Also add method for recent bookings:
+    public List<Booking> GetRecentBookings(int limit) {
+        return bookingRepository.findAll().stream()
+                .sorted((b1, b2) -> b2.getBookingDate().compareTo(b1.getBookingDate()))
+                .limit(limit)
+                .toList();
+    }
+    public List<Booking> getRecentBookings(int limit) {
+    return bookingRepository.findAll().stream()
+        .sorted((b1, b2) -> b2.getBookingDate().compareTo(b1.getBookingDate()))
+        .limit(limit)
+        .collect(Collectors.toList());
+}
 
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();

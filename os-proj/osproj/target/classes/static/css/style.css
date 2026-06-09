@@ -1,246 +1,199 @@
-/* Root Variables */
+/* ========== DARK THEME WITH GOLD ACCENTS ========== */
 :root {
     --gold: #C5A55A;
-    --dark: #1a1a1a;
-    --light: #f8f9fa;
+    --gold-dark: #a0813e;
+    --dark-bg: #0a0c10;
+    --card-bg: #111318;
+    --border-light: rgba(255, 255, 255, 0.08);
+    --text-light: #e2e8f0;
+    --text-muted: #94a3b8;
 }
 
-/* Global Styles */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding-top: 76px;
+    background: var(--dark-bg);
+    color: var(--text-light);
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    padding-top: 80px;
 }
 
-.text-gold {
+/* Glass Navbar (Dark) */
+.navbar {
+    background: rgba(10, 12, 16, 0.95) !important;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-light);
+}
+.navbar-brand, .nav-link {
+    color: var(--text-light) !important;
+}
+.nav-link:hover, .navbar-brand:hover {
     color: var(--gold) !important;
 }
 
-.bg-gold {
-    background-color: var(--gold) !important;
+/* Dark Cards */
+.card, .stat-card, .room-card, .review-card, .algorithm-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 28px;
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+}
+.card:hover, .room-card:hover {
+    border-color: var(--gold);
+    box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
 }
 
+/* Buttons */
 .btn-gold {
-    background-color: var(--gold);
-    color: white;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
     border: none;
-    padding: 10px 30px;
+    color: #0a0c10;
+    font-weight: 700;
+    border-radius: 40px;
+    padding: 10px 28px;
     transition: all 0.3s;
 }
-
 .btn-gold:hover {
-    background-color: #b8942e;
-    color: white;
     transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(197,165,90,0.3);
 }
-
 .btn-outline-gold {
     border: 2px solid var(--gold);
     color: var(--gold);
-    transition: all 0.3s;
+    background: transparent;
+    border-radius: 40px;
 }
-
 .btn-outline-gold:hover {
-    background-color: var(--gold);
-    color: white;
+    background: var(--gold);
+    color: #0a0c10;
 }
 
-/* Hero Section */
-.hero-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    height: 100vh;
-    min-height: 600px;
-    position: relative;
+/* Auth Pages (Login / Signup) - FIXED BACKGROUND */
+.auth-wrapper {
+    min-height: 100vh;
     display: flex;
     align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 2rem;
+}
+.auth-bg-img {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+.auth-wrapper::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: -1;
+}
+.auth-card {
+    background: rgba(17, 19, 24, 0.95);
+    backdrop-filter: blur(12px);
+    border-radius: 32px;
+    border: 1px solid rgba(197, 165, 90, 0.3);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 25px 45px rgba(0,0,0,0.5);
+}
+.auth-card .form-control {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--border-light);
+    color: white;
+    border-radius: 30px;
+    padding: 12px 20px;
+}
+.auth-card .form-control:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(197,165,90,0.2);
 }
 
-.hero-overlay {
+/* Room Cards with Images */
+.room-card {
+    overflow: hidden;
+}
+.room-img {
+    height: 240px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+.room-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--gold);
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-weight: bold;
+    color: #0a0c10;
+}
+.price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--gold);
+}
+
+/* Booking Page Banner Fix */
+.booking-banner {
+    height: 250px;
+    background-size: cover;
+    background-position: center 30%;
+    position: relative;
+}
+.booking-banner::before {
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-}
-
-.hero-content {
-    position: relative;
-    z-index: 1;
-    color: white;
-    text-align: center;
-}
-
-.hero-content h1 {
-    font-size: 4rem;
-    margin-bottom: 20px;
-    animation: fadeInUp 1s;
-}
-
-.hero-content p {
-    font-size: 1.5rem;
-    margin-bottom: 30px;
-    animation: fadeInUp 1.5s;
-}
-
-/* Feature Cards */
-.feature-card {
-    border: none;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s;
-}
-
-.feature-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-/* Room Cards */
-.room-card {
-    border: none;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.room-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-.room-img {
-    height: 200px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-end;
-    padding: 10px;
-}
-
-.price {
-    font-size: 1.2rem;
-    color: var(--gold);
-    font-weight: bold;
-}
-
-/* Animations */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Loading Spinner */
-.spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid var(--gold);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Table Styles */
-.table-hover tbody tr:hover {
-    background-color: rgba(197, 165, 90, 0.1);
-}
-
-/* Badge Styles */
-.badge {
-    padding: 8px 12px;
-    font-size: 0.9rem;
-}
-
-/* Form Styles */
-.form-control:focus {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 0.2rem rgba(197, 165, 90, 0.25);
-}
-
-.btn {
-    border-radius: 5px;
-    padding: 8px 20px;
-    transition: all 0.3s;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .hero-content h1 {
-        font-size: 2.5rem;
-    }
-    
-    .hero-content p {
-        font-size: 1.2rem;
-    }
-    
-    .hero-section {
-        height: 70vh;
-    }
-}
-
-/* Scheduling Page Styles */
-.algorithm-btn {
-    position: relative;
-    overflow: hidden;
-}
-
-.algorithm-btn::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-}
-
-.algorithm-btn:hover::after {
-    width: 300px;
-    height: 300px;
-}
-
-/* Chart Styles */
-.chart-container {
-    position: relative;
-    margin: auto;
-    height: 300px;
     width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+}
+.booking-banner .container {
+    position: relative;
+    z-index: 2;
 }
 
+/* Classic Form Styles */
+.form-classic .form-control, .form-classic .form-select {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 12px 16px;
+    color: white;
+}
+.form-classic .form-control:focus, .form-classic .form-select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px rgba(197,165,90,0.25);
+}
+.form-classic label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+}
+/* Ensure room image container displays properly */
+.room-img {
+    height: 240px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    border-radius: 24px 24px 0 0;
+}
 /* Footer */
-footer a {
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-footer a:hover {
-    color: var(--gold) !important;
-}
-
-.social-links a {
-    font-size: 1.5rem;
-    margin-right: 15px;
-}
-
-/* Print Styles */
-@media print {
-    .navbar, .btn, form {
-        display: none !important;
-    }
-    
-    body {
-        padding-top: 0;
-    }
+footer {
+    background: #050608 !important;
+    border-top: 1px solid var(--border-light);
+    color: var(--text-muted);
 }

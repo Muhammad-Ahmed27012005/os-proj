@@ -1,9 +1,12 @@
 // Global variables
 let tasks = [];
 
-// Load tasks on page load
+// Initialize on page load
 document.addEventListener("DOMContentLoaded", function () {
-  loadTasks();
+  // Load tasks if on scheduling page
+  if (document.getElementById("taskListBody")) {
+    loadTasks();
+  }
 
   // Add task form handler
   const taskForm = document.getElementById("taskForm");
@@ -13,9 +16,22 @@ document.addEventListener("DOMContentLoaded", function () {
       addTask();
     });
   }
+
+  // Initialize dashboard chart if on dashboard page
+  if (document.getElementById("bookingChart")) {
+    initDashboardChart();
+  }
+
+  // Auto-dismiss alerts
+  setTimeout(function () {
+    document.querySelectorAll(".alert-dismissible").forEach((alert) => {
+      let bsAlert = new bootstrap.Alert(alert);
+      bsAlert.close();
+    });
+  }, 5000);
 });
 
-// Add new task
+// ========== TASK SCHEDULING FUNCTIONS ==========
 function addTask() {
   const task = {
     taskName: document.getElementById("taskName").value,
@@ -27,28 +43,22 @@ function addTask() {
 
   fetch("/scheduling/task/save", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(task),
   })
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
-        alert("Task added successfully!");
+        showToast("Task added successfully!", "success");
         document.getElementById("taskForm").reset();
         loadTasks();
       } else {
-        alert("Error: " + data.error);
+        showToast("Error: " + data.error, "danger");
       }
     })
-    .catch((error) => {
-      console.error("Error:", error);
-      alert("Failed to add task");
-    });
+    .catch((error) => showToast("Failed to add task", "danger"));
 }
 
-// Load tasks
 function loadTasks() {
   fetch("/scheduling/task/list")
     .then((response) => response.json())
@@ -59,38 +69,32 @@ function loadTasks() {
     .catch((error) => console.error("Error loading tasks:", error));
 }
 
-// Display tasks in table
 function displayTasks() {
   const tbody = document.getElementById("taskListBody");
   if (!tbody) return;
-
   tbody.innerHTML = "";
-
   tasks.forEach((task) => {
-    const row = tbody.insertRow();
-    row.innerHTML = `
-            <td>${task.id}</td>
-            <td>${task.taskName}</td>
-            <td>${task.burstTime}</td>
-            <td>${task.priority}</td>
-            <td>${task.arrivalTime}</td>
-            <td><span class="badge bg-info">${task.taskType}</span></td>
-            <td><span class="badge bg-${task.status === "COMPLETED" ? "success" : "warning"}">${task.status}</span></td>
+    let statusClass = task.status === "COMPLETED" ? "success" : "warning";
+    tbody.innerHTML += `
+            <tr>
+                <td>${task.id}</td>
+                <td>${task.taskName}</td>
+                <td>${task.burstTime}</td>
+                <td>${task.priority}</td>
+                <td>${task.arrivalTime}</td>
+                <td><span class="badge bg-info">${task.taskType}</span></td>
+                <td><span class="badge bg-${statusClass}">${task.status}</span></td>
+            </tr>
         `;
   });
 }
 
-// Run scheduling algorithm
 function runScheduling(algorithm) {
-  const timeQuantum = document.getElementById("timeQuantum").value || 2;
-
-  // Show loading spinner
+  const timeQuantum = document.getElementById("timeQuantum")?.value || 2;
   document.getElementById("resultsSection").style.display = "block";
-  document.getElementById("metricsDisplay").innerHTML =
-    '<div class="text-center"><div class="spinner"></div><p>Running ' +
-    algorithm +
-    " scheduling...</p></div>";
-
+  document.getElementById("metricsDisplay").innerHTML = `
+        <div class="text-center"><div class="spinner"></div><p>Running ${algorithm} scheduling...</p></div>
+    `;
   fetch(`/scheduling/schedule/${algorithm}?timeQuantum=${timeQuantum}`, {
     method: "POST",
   })
@@ -99,182 +103,161 @@ function runScheduling(algorithm) {
       if (data.success) {
         displayResults(data.data);
       } else {
-        alert("Error: " + data.error);
+        showToast("Error: " + data.error, "danger");
       }
     })
-    .catch((error) => {
-      console.error("Error:", error);
-      alert("Failed to run scheduling algorithm");
-    });
+    .catch((error) => showToast("Failed to run scheduling", "danger"));
 }
 
-// Display scheduling results
+// Replace the existing displayResults function with:
 function displayResults(data) {
-  const resultsBody = document.getElementById("resultsBody");
-  const metricsDisplay = document.getElementById("metricsDisplay");
+    const metrics = data.metrics;
+    document.getElementById("metricsDisplay").innerHTML = `
+        <div class="alert alert-info rounded-4">
+            <strong>${data.algorithm}</strong> | Avg Waiting: ${metrics.avgWaitingTime.toFixed(2)} | Avg Turnaround: ${metrics.avgTurnaroundTime.toFixed(2)}
+        </div>`;
+    
+    const tbody = document.getElementById("resultsBody");
+    tbody.innerHTML = "";
+    data.scheduledTasks.forEach(task => {
+        tbody.innerHTML += `<tr>
+            <td>${task.taskName}</td><td>${task.arrivalTime}</td><td>${task.burstTime}</td>
+            <td>${task.waitingTime}</td><td>${task.turnaroundTime}</td>
+        </tr>`;
+    });
 
-  // Display metrics
-  const metrics = data.metrics;
-  metricsDisplay.innerHTML = `
-        <div class="row">
-            <div class="col-md-6">
-                <div class="alert alert-info">
-                    <h5>Algorithm: ${data.algorithm}</h5>
-                    <p><strong>Average Waiting Time:</strong> ${metrics.avgWaitingTime.toFixed(2)}</p>
-                    <p><strong>Average Turnaround Time:</strong> ${metrics.avgTurnaroundTime.toFixed(2)}</p>
+    // Build visual timeline (Gantt bars)
+    let timelineHtml = `<h6>Execution Timeline</h6>`;
+    let currentTime = 0;
+    data.scheduledTasks.forEach(task => {
+        let start = currentTime;
+        let end = currentTime + task.burstTime;
+        let widthPercent = (task.burstTime / (data.scheduledTasks.reduce((sum, t) => sum + t.burstTime, 0))) * 100;
+        timelineHtml += `
+            <div class="gantt-row">
+                <div class="gantt-label">${task.taskName}</div>
+                <div class="gantt-bar">
+                    <div class="gantt-progress" style="width: ${widthPercent}%;">${task.burstTime}</div>
                 </div>
-            </div>
-        </div>
-    `;
-
-  // Display task details
-  resultsBody.innerHTML = "";
-  data.scheduledTasks.forEach((task) => {
-    const row = resultsBody.insertRow();
-    row.innerHTML = `
-            <td>${task.taskName}</td>
-            <td>${task.arrivalTime}</td>
-            <td>${task.burstTime}</td>
-            <td>${task.waitingTime}</td>
-            <td>${task.turnaroundTime}</td>
-            <td><span class="badge bg-success">${task.status}</span></td>
-        `;
-  });
-
-  // Show results section
-  document.getElementById("resultsSection").style.display = "block";
-  document.getElementById("comparisonSection").style.display = "none";
-
-  // Scroll to results
-  document
-    .getElementById("resultsSection")
-    .scrollIntoView({ behavior: "smooth" });
+                <small>${start} → ${end}</small>
+            </div>`;
+        currentTime = end;
+    });
+    document.getElementById("timelineContainer").innerHTML = timelineHtml;
+    document.getElementById("resultsSection").style.display = "block";
 }
 
-// Compare all algorithms
 function compareAlgorithms() {
   document.getElementById("comparisonSection").style.display = "block";
   document.getElementById("comparisonBody").innerHTML =
-    '<tr><td colspan="3" class="text-center"><div class="spinner"></div><p>Comparing algorithms...</p></td></tr>';
-
-  fetch("/scheduling/compare", {
-    method: "GET",
-  })
+    `<tr><td colspan="3" class="text-center"><div class="spinner"></div></td></tr>`;
+  fetch("/scheduling/compare")
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
-        displayComparison(data.data);
+        const comparisonBody = document.getElementById("comparisonBody");
+        comparisonBody.innerHTML = "";
+        for (const [algorithm, metrics] of Object.entries(data.data)) {
+          comparisonBody.innerHTML += `
+                        <tr>
+                            <td><strong>${algorithm}</strong></td>
+                            <td>${metrics.avgWaitingTime.toFixed(2)}</td>
+                            <td>${metrics.avgTurnaroundTime.toFixed(2)}</td>
+                        </tr>
+                    `;
+        }
       } else {
-        alert("Error: " + data.error);
+        showToast("Error comparing algorithms", "danger");
       }
     })
-    .catch((error) => {
-      console.error("Error:", error);
-      alert("Failed to compare algorithms");
-    });
+    .catch((error) => showToast("Failed to compare", "danger"));
 }
 
-// Display algorithm comparison
-function displayComparison(data) {
-  const comparisonBody = document.getElementById("comparisonBody");
-  comparisonBody.innerHTML = "";
-
-  for (const [algorithm, metrics] of Object.entries(data)) {
-    const row = comparisonBody.insertRow();
-    row.innerHTML = `
-            <td><strong>${algorithm}</strong></td>
-            <td>${metrics.avgWaitingTime.toFixed(2)}</td>
-            <td>${metrics.avgTurnaroundTime.toFixed(2)}</td>
-        `;
-  }
-
-  document.getElementById("comparisonSection").style.display = "block";
-  document
-    .getElementById("comparisonSection")
-    .scrollIntoView({ behavior: "smooth" });
-}
-
-// Room management functions
+// ========== ROOM & BOOKING HELPERS ==========
 function editRoom(id) {
-  // Implement room editing logic
-  alert("Edit room functionality coming soon!");
+  showToast("Edit functionality coming soon", "info");
 }
-
 function deleteRoom(id) {
   if (confirm("Are you sure you want to delete this room?")) {
     window.location.href = `/rooms/delete/${id}`;
   }
 }
-
-// Booking management functions
-function viewBooking(id) {
-  // Implement booking view logic
-  alert("View booking functionality coming soon!");
-}
-
 function cancelBooking(id) {
-  if (confirm("Are you sure you want to cancel this booking?")) {
+  if (confirm("Cancel this booking?")) {
     window.location.href = `/bookings/cancel/${id}`;
   }
 }
 
-// Utility functions
+// ========== DASHBOARD CHART ==========
+function initDashboardChart() {
+  fetch("/bookings/recent-stats")
+    .then((res) => res.json())
+    .then((data) => {
+      const ctx = document.getElementById("bookingChart").getContext("2d");
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: data.labels || ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+          datasets: [
+            {
+              label: "Bookings",
+              data: data.values || [12, 19, 15, 17, 14, 23],
+              borderColor: "#C5A55A",
+              backgroundColor: "rgba(197,165,90,0.1)",
+              tension: 0.4,
+              fill: true,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: "top" },
+          },
+        },
+      });
+    })
+    .catch((err) => console.error("Chart error:", err));
+}
+
+// ========== UTILITY ==========
+function showToast(message, type) {
+  const toastContainer =
+    document.getElementById("toastContainer") || createToastContainer();
+  const toastId = "toast-" + Date.now();
+  const toastHtml = `
+        <div id="${toastId}" class="toast align-items-center text-white bg-${type} border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `;
+  toastContainer.insertAdjacentHTML("beforeend", toastHtml);
+  const toastElement = document.getElementById(toastId);
+  const toast = new bootstrap.Toast(toastElement, {
+    autohide: true,
+    delay: 4000,
+  });
+  toast.show();
+  toastElement.addEventListener("hidden.bs.toast", () => toastElement.remove());
+}
+
+function createToastContainer() {
+  const container = document.createElement("div");
+  container.id = "toastContainer";
+  container.style.position = "fixed";
+  container.style.bottom = "20px";
+  container.style.right = "20px";
+  container.style.zIndex = "1100";
+  document.body.appendChild(container);
+  return container;
+}
+
 function formatCurrency(amount) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
   }).format(amount);
 }
-
-function formatDate(dateString) {
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
-
-// Search functionality
-function searchRooms() {
-  const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-  const roomCards = document.querySelectorAll(".room-card");
-
-  roomCards.forEach((card) => {
-    const roomType = card.querySelector("h5").textContent.toLowerCase();
-    const roomNumber = card
-      .querySelector(".text-muted")
-      .textContent.toLowerCase();
-
-    if (roomType.includes(searchTerm) || roomNumber.includes(searchTerm)) {
-      card.closest(".col-md-4").style.display = "block";
-    } else {
-      card.closest(".col-md-4").style.display = "none";
-    }
-  });
-}
-
-// Filter rooms by type
-function filterRoomsByType(type) {
-  window.location.href = `/rooms?type=${type}`;
-}
-
-// Auto-dismiss alerts after 5 seconds
-document.addEventListener("DOMContentLoaded", function () {
-  setTimeout(function () {
-    const alerts = document.querySelectorAll(".alert-dismissible");
-    alerts.forEach((alert) => {
-      const bsAlert = new bootstrap.Alert(alert);
-      bsAlert.close();
-    });
-  }, 5000);
-});
-
-// Smooth scroll for anchor links
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-  anchor.addEventListener("click", function (e) {
-    e.preventDefault();
-    document.querySelector(this.getAttribute("href")).scrollIntoView({
-      behavior: "smooth",
-    });
-  });
-});

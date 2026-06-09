@@ -4,6 +4,7 @@ package com.osproject.hotel.controller;
 
 import com.osproject.hotel.model.Booking;
 import com.osproject.hotel.service.BookingService;
+import com.osproject.hotel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,13 +17,18 @@ public class BookingController {
     
     @Autowired
     private BookingService bookingService;
+
+    @Autowired
+    private RoomService roomService;
     
     @GetMapping
     public String listBookings(Model model) {
         model.addAttribute("bookings", bookingService.getAllBookings());
+        model.addAttribute("availableRooms", roomService.getAvailableRooms());
+        model.addAttribute("newBooking", new Booking());
         return "booking";
     }
-    
+
     @PostMapping("/create")
     public String createBooking(@ModelAttribute Booking booking, RedirectAttributes redirectAttributes) {
         try {

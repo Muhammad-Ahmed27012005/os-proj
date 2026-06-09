@@ -25,6 +25,13 @@ public class SchedulingController {
         return "scheduling";
     }
 
+    // Add this method:
+    @GetMapping("/task/list")
+    @ResponseBody
+    public ResponseEntity<List<Task>> listTasks() {
+        return ResponseEntity.ok(schedulingService.getAllTasks());
+    }
+
     @PostMapping("/task/save")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> saveTask(@RequestBody Task task) {
