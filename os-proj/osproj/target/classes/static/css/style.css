@@ -1,33 +1,41 @@
-/* ========== DARK THEME WITH GOLD ACCENTS ========== */
+/* ========== GOOGLE FONTS (to be included in HTML head) ========== */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ========== ROOT VARIABLES ========== */
 :root {
     --gold: #C5A55A;
+    --gold-light: #d4b86a;
     --gold-dark: #a0813e;
     --dark-bg: #0a0c10;
-    --card-bg: #111318;
+    --card-bg: rgba(17, 19, 24, 0.85);
     --border-light: rgba(255, 255, 255, 0.08);
     --text-light: #e2e8f0;
     --text-muted: #94a3b8;
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
+/* ========== BASE ========== */
 body {
     background: var(--dark-bg);
     color: var(--text-light);
-    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-    padding-top: 80px;
-    /* Video background will be placed via a dedicated div */
+    font-family: var(--font-body);
+    margin: 0;
+    padding-top: 80px; /* navbar height */
+    overflow-x: hidden;
     position: relative;
-    z-index: 1;
 }
 
 /* ========== VIDEO BACKGROUND (global) ========== */
-.video-bg {
+#bgVideo {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: -1;
+    z-index: -2;
+    filter: brightness(0.4);
 }
 .video-overlay {
     position: fixed;
@@ -35,179 +43,269 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 0;
-}
-/* Make sure all main content has a higher z-index */
-.container, .navbar, footer {
-    position: relative;
-    z-index: 2;
-}
-.booking-banner, .hero-section {
-    position: relative;
-    z-index: 2;
+    background: linear-gradient(135deg, rgba(10,12,16,0.85) 0%, rgba(10,12,16,0.6) 100%);
+    z-index: -1;
 }
 
-/* Glass Navbar (Dark) */
+/* ========== NAVBAR (glass morphism) ========== */
 .navbar {
-    background: rgba(10, 12, 16, 0.95) !important;
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-light);
+    background: rgba(10, 12, 16, 0.8) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(197, 165, 90, 0.3);
+    transition: all 0.4s ease;
+    padding: 0.75rem 0;
 }
-.navbar-brand, .nav-link {
+.navbar-brand {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--gold) !important;
+    letter-spacing: 2px;
+    transition: color 0.3s;
+}
+.navbar-brand:hover {
+    color: var(--gold-light) !important;
+}
+.nav-link {
     color: var(--text-light) !important;
+    font-weight: 500;
+    margin: 0 0.5rem;
+    position: relative;
+    transition: color 0.3s;
 }
-.nav-link:hover, .navbar-brand:hover {
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+}
+.nav-link:hover {
     color: var(--gold) !important;
 }
+.nav-link:hover::after {
+    width: 100%;
+}
+.navbar-toggler {
+    border-color: var(--gold);
+}
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(197, 165, 90, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
 
-/* Dark Cards */
-.card, .stat-card, .room-card, .review-card, .algorithm-card {
+/* ========== HERO / BANNER SECTIONS ========== */
+.hero-section {
+    padding: 6rem 0;
+    position: relative;
+    z-index: 2;
+}
+.hero-section h1 {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--gold);
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+.hero-section p {
+    font-size: 1.25rem;
+    opacity: 0.9;
+}
+
+/* ========== CARDS ========== */
+.card {
     background: var(--card-bg);
     border: 1px solid var(--border-light);
-    border-radius: 28px;
-    backdrop-filter: blur(4px);
-    transition: all 0.3s ease;
+    border-radius: 24px;
+    backdrop-filter: blur(15px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s;
 }
-.card:hover, .room-card:hover {
+.card:hover {
+    transform: translateY(-5px);
     border-color: var(--gold);
-    box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+    box-shadow: 0 20px 40px rgba(197, 165, 90, 0.2);
+}
+.stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 24px;
+    padding: 1.5rem;
+    transition: 0.3s;
+}
+.stat-card:hover {
+    border-color: var(--gold);
+    transform: scale(1.02);
+}
+.stat-number {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--gold);
+    font-size: 2.5rem;
+}
+.stat-icon {
+    font-size: 2rem;
+    opacity: 0.8;
 }
 
-/* Buttons */
+/* ========== BUTTONS ========== */
 .btn-gold {
     background: linear-gradient(135deg, var(--gold), var(--gold-dark));
     border: none;
     color: #0a0c10;
     font-weight: 700;
-    border-radius: 40px;
-    padding: 10px 28px;
+    border-radius: 50px;
+    padding: 12px 30px;
     transition: all 0.3s;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
 }
 .btn-gold:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(197,165,90,0.3);
+    box-shadow: 0 10px 25px rgba(197,165,90,0.4);
+    color: #0a0c10;
 }
 .btn-outline-gold {
     border: 2px solid var(--gold);
     color: var(--gold);
     background: transparent;
-    border-radius: 40px;
+    border-radius: 50px;
+    padding: 10px 28px;
+    font-weight: 600;
+    transition: all 0.3s;
 }
 .btn-outline-gold:hover {
     background: var(--gold);
     color: #0a0c10;
+    transform: translateY(-2px);
 }
 
-/* Auth Pages – use video-bg already defined */
+/* ========== AUTH PAGES ========== */
 .auth-wrapper {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 2rem;
     position: relative;
     z-index: 2;
-    padding: 2rem;
 }
 .auth-card {
-    background: rgba(17, 19, 24, 0.95);
-    backdrop-filter: blur(12px);
+    background: rgba(17, 19, 24, 0.8);
+    backdrop-filter: blur(25px);
     border-radius: 32px;
-    border: 1px solid rgba(197, 165, 90, 0.3);
-    padding: 2.5rem;
+    border: 1px solid rgba(197, 165, 90, 0.4);
+    padding: 3rem 2.5rem;
     width: 100%;
-    max-width: 480px;
-    box-shadow: 0 25px 45px rgba(0,0,0,0.5);
+    max-width: 450px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+    transition: transform 0.3s;
 }
-.auth-card .form-control {
+.auth-card:hover {
+    transform: scale(1.01);
+}
+.auth-card h2 {
+    font-family: var(--font-heading);
+    color: var(--gold);
+}
+.form-control, .form-select {
     background: rgba(255,255,255,0.08);
     border: 1px solid var(--border-light);
     color: white;
     border-radius: 30px;
     padding: 12px 20px;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
-.auth-card .form-control:focus {
+.form-control:focus, .form-select:focus {
     border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(197,165,90,0.2);
+    box-shadow: 0 0 10px rgba(197,165,90,0.3);
+    background: rgba(255,255,255,0.1);
+}
+.form-label {
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 4px;
 }
 
-/* Room Cards with Images */
+/* ========== ROOM CARDS ========== */
 .room-card {
     overflow: hidden;
+    transition: all 0.4s;
+}
+.room-card:hover {
+    transform: translateY(-8px);
 }
 .room-img {
     height: 240px;
     background-size: cover;
     background-position: center;
     position: relative;
+    transition: transform 0.4s;
+}
+.room-card:hover .room-img {
+    transform: scale(1.05);
 }
 .room-badge {
     position: absolute;
     top: 15px;
     right: 15px;
     background: var(--gold);
-    padding: 6px 16px;
-    border-radius: 30px;
-    font-weight: bold;
     color: #0a0c10;
-}
-.price {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--gold);
-}
-
-/* Booking Page Banner Fix */
-.booking-banner {
-    height: 250px;
-    background-size: cover;
-    background-position: center 30%;
-    position: relative;
-}
-.booking-banner::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-}
-.booking-banner .container {
-    position: relative;
-    z-index: 2;
+    font-weight: bold;
+    padding: 5px 18px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-/* Classic Form Styles */
-.form-classic .form-control, .form-classic .form-select {
-    background: rgba(255,255,255,0.05);
+/* ========== REVIEW CARDS ========== */
+.review-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(15px);
     border: 1px solid var(--border-light);
-    border-radius: 16px;
-    padding: 12px 16px;
-    color: white;
+    border-radius: 28px;
+    padding: 2rem;
+    text-align: center;
+    transition: 0.3s;
 }
-.form-classic .form-control:focus, .form-classic .form-select:focus {
+.review-card:hover {
     border-color: var(--gold);
-    box-shadow: 0 0 0 2px rgba(197,165,90,0.25);
+    transform: translateY(-5px);
 }
-.form-classic label {
-    font-weight: 600;
-    margin-bottom: 6px;
+.review-card img.avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    margin-bottom: 1rem;
+}
+.stars {
     color: var(--gold);
-    letter-spacing: 0.5px;
+    margin: 0.5rem 0;
+}
+.quote {
+    font-style: italic;
+    color: var(--text-muted);
 }
 
-/* Footer */
+/* ========== FOOTER ========== */
 footer {
     background: #050608 !important;
     border-top: 1px solid var(--border-light);
     color: var(--text-muted);
+    position: relative;
+    z-index: 2;
 }
 
-/* Stat cards & others */
-.stat-card {
-    border-radius: 28px;
-}
-.stat-number {
-    font-weight: 700;
+/* ========== SCROLLBAR ========== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0a0c10; }
+::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .hero-section h1 { font-size: 2.5rem; }
 }

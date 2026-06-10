@@ -1,6 +1,17 @@
 // Global variables
 let tasks = [];
 
+
+// Initialize AOS animation library
+AOS.init({
+    duration: 1000,
+    once: true,
+    easing: 'ease-in-out',
+});
+
+// Rest of your existing script.js code (unchanged)...
+// ... (keep all functions from original script.js)
+
 // Initialize on page load
 document.addEventListener("DOMContentLoaded", function () {
   // Load tasks if on scheduling page
