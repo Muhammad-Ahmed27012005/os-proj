@@ -8,6 +8,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- optional: image hover style -->
+    <style>
+        .service-img {
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .service-row:hover .service-img {
+            transform: scale(1.02);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.5);
+        }
+    </style>
 </head>
 <body>
     <video autoplay muted loop playsinline id="bgVideo">
@@ -17,7 +27,6 @@
 
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <!-- Hero -->
     <div class="hero-section" data-aos="fade-down">
         <div class="container text-center">
             <h1>Welcome back, <span sec:authentication="name"></span></h1>
@@ -27,7 +36,7 @@
 
     <div class="container py-5">
 
-        <!-- EXPLORE OUR SERVICES (now 2.5 s) -->
+        <!-- EXPLORE OUR SERVICES (carousel) -->
         <div class="mb-5" data-aos="fade-up">
             <h2 class="text-center mb-4"><i class="fas fa-compass text-gold"></i> Explore Our Services</h2>
             <div id="servicesCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2500">
@@ -84,7 +93,7 @@
             </div>
         </div>
 
-        <!-- EXCELLENCE EXPERIENCE (now 2.5 s) -->
+        <!-- EXCELLENCE EXPERIENCE (carousel) -->
         <div class="mb-5" data-aos="fade-up" data-aos-delay="200">
             <h2 class="text-center mb-4"><i class="fas fa-star text-gold"></i> Excellence Experience</h2>
             <div id="excellenceCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2500">
@@ -113,7 +122,7 @@
             </div>
         </div>
 
-        <!-- OUR AMENITIES (static grid, no carousel) -->
+        <!-- OUR AMENITIES (grid) -->
         <div class="mb-5" data-aos="fade-up" data-aos-delay="300">
             <h2 class="text-center mb-4"><i class="fas fa-concierge-bell text-gold"></i> Our Amenities</h2>
             <div class="row g-4">
@@ -162,35 +171,23 @@
             </div>
         </div>
 
-        <!-- DINING (now 2.5 s) -->
+        <!-- DINING (carousel) -->
         <div class="mb-5" data-aos="fade-up" data-aos-delay="400">
             <h2 class="text-center mb-4"><i class="fas fa-utensils text-gold"></i> Exquisite Dining</h2>
             <div id="diningCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2500">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <div class="row g-3">
-                            <div class="col-md-4">
-                                <div class="card"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Signature Steak</h5><p class="text-muted">Aged to perfection</p></div></div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card"><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Garden Salad</h5><p class="text-muted">Farm fresh ingredients</p></div></div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card"><img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Artisan Bread</h5><p class="text-muted">Baked daily</p></div></div>
-                            </div>
+                            <div class="col-md-4"><div class="card"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Signature Steak</h5><p class="text-muted">Aged to perfection</p></div></div></div>
+                            <div class="col-md-4"><div class="card"><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Garden Salad</h5><p class="text-muted">Farm fresh ingredients</p></div></div></div>
+                            <div class="col-md-4"><div class="card"><img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Artisan Bread</h5><p class="text-muted">Baked daily</p></div></div></div>
                         </div>
                     </div>
                     <div class="carousel-item">
                         <div class="row g-3">
-                            <div class="col-md-4">
-                                <div class="card"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Lobster Bisque</h5><p class="text-muted">Rich &amp; creamy</p></div></div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Grilled Salmon</h5><p class="text-muted">With seasonal vegetables</p></div></div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card"><img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Crème Brûlée</h5><p class="text-muted">Classic dessert</p></div></div>
-                            </div>
+                            <div class="col-md-4"><div class="card"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Lobster Bisque</h5><p class="text-muted">Rich &amp; creamy</p></div></div></div>
+                            <div class="col-md-4"><div class="card"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Grilled Salmon</h5><p class="text-muted">With seasonal vegetables</p></div></div></div>
+                            <div class="col-md-4"><div class="card"><img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Crème Brûlée</h5><p class="text-muted">Classic dessert</p></div></div></div>
                         </div>
                     </div>
                 </div>
@@ -201,6 +198,110 @@
                     <span class="carousel-control-next-icon"></span>
                 </button>
             </div>
+        </div>
+
+        <!-- ================= OUR SERVICES (enhanced animations) ================= -->
+        <div class="mb-5" data-aos="fade-up">
+            <h2 class="text-center mb-5"><i class="fas fa-bell-concierge text-gold"></i> Our Services</h2>
+
+            <!-- Service 1: Restaurant – image left, text right -->
+            <div class="row align-items-center mb-5 service-row" data-aos="fade-right">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=400&fit=crop" class="img-fluid rounded-4 shadow service-img" alt="Restaurant">
+                </div>
+                <div class="col-md-6">
+                    <h3 class="text-gold"><i class="fas fa-utensils me-2"></i> Gourmet Restaurant</h3>
+                    <p class="text-light">Savour world‑class cuisine crafted by Michelin‑starred chefs. Enjoy an intimate ambience with panoramic city views.</p>
+                    <ul class="list-unstyled text-muted">
+                        <li data-aos="fade-up" data-aos-delay="50"><i class="fas fa-check-circle text-gold me-1"></i> International &amp; local dishes</li>
+                        <li data-aos="fade-up" data-aos-delay="100"><i class="fas fa-check-circle text-gold me-1"></i> Private dining rooms</li>
+                        <li data-aos="fade-up" data-aos-delay="150"><i class="fas fa-check-circle text-gold me-1"></i> 24‑hour room service</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Service 2: Meeting Room – image right, text left -->
+            <div class="row align-items-center mb-5 service-row" data-aos="fade-left">
+                <div class="col-md-6 order-md-2 mb-3 mb-md-0">
+                    <img src="https://images.unsplash.com/photo-1517502884422-41eaead166d4?w=600&h=400&fit=crop" class="img-fluid rounded-4 shadow service-img" alt="Meeting Room">
+                </div>
+                <div class="col-md-6 order-md-1">
+                    <h3 class="text-gold"><i class="fas fa-briefcase me-2"></i> Executive Meeting Rooms</h3>
+                    <p class="text-light">State‑of‑the‑art conference facilities with high‑speed WiFi, projectors, and video conferencing – perfect for business events.</p>
+                    <ul class="list-unstyled text-muted">
+                        <li data-aos="fade-up" data-aos-delay="50"><i class="fas fa-check-circle text-gold me-1"></i> Capacities from 10 to 100</li>
+                        <li data-aos="fade-up" data-aos-delay="100"><i class="fas fa-check-circle text-gold me-1"></i> Smart boards &amp; video walls</li>
+                        <li data-aos="fade-up" data-aos-delay="150"><i class="fas fa-check-circle text-gold me-1"></i> Catering packages available</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Service 3: Sauna – image left, text right -->
+            <div class="row align-items-center mb-5 service-row" data-aos="fade-right">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=600&h=400&fit=crop" class="img-fluid rounded-4 shadow service-img" alt="Sauna">
+                </div>
+                <div class="col-md-6">
+                    <h3 class="text-gold"><i class="fas fa-hot-tub me-2"></i> Luxury Sauna &amp; Spa</h3>
+                    <p class="text-light">Unwind in our Finnish sauna, steam rooms, and hydrotherapy pools. A sanctuary of wellness and tranquillity.</p>
+                    <ul class="list-unstyled text-muted">
+                        <li data-aos="fade-up" data-aos-delay="50"><i class="fas fa-check-circle text-gold me-1"></i> Dry &amp; wet sauna</li>
+                        <li data-aos="fade-up" data-aos-delay="100"><i class="fas fa-check-circle text-gold me-1"></i> Aromatherapy treatments</li>
+                        <li data-aos="fade-up" data-aos-delay="150"><i class="fas fa-check-circle text-gold me-1"></i> Personal wellness coach</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Service 4: Swimming Pool – image right, text left -->
+            <div class="row align-items-center mb-5 service-row" data-aos="fade-left">
+                <div class="col-md-6 order-md-2 mb-3 mb-md-0">
+                    <img src="https://images.unsplash.com/photo-1572331165267-854da2b10ccc?w=600&h=400&fit=crop" class="img-fluid rounded-4 shadow service-img" alt="Swimming Pool">
+                </div>
+                <div class="col-md-6 order-md-1">
+                    <h3 class="text-gold"><i class="fas fa-swimming-pool me-2"></i> Infinity Pool</h3>
+                    <p class="text-light">A rooftop infinity pool with breath‑taking skyline views. Relax on sun loungers or enjoy poolside cocktails.</p>
+                    <ul class="list-unstyled text-muted">
+                        <li data-aos="fade-up" data-aos-delay="50"><i class="fas fa-check-circle text-gold me-1"></i> Temperature controlled</li>
+                        <li data-aos="fade-up" data-aos-delay="100"><i class="fas fa-check-circle text-gold me-1"></i> Poolside bar &amp; grill</li>
+                        <li data-aos="fade-up" data-aos-delay="150"><i class="fas fa-check-circle text-gold me-1"></i> Private cabanas</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Service 5: Gym – image left, text right -->
+            <div class="row align-items-center mb-5 service-row" data-aos="fade-right">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop" class="img-fluid rounded-4 shadow service-img" alt="Gym">
+                </div>
+                <div class="col-md-6">
+                    <h3 class="text-gold"><i class="fas fa-dumbbell me-2"></i> Fitness Centre</h3>
+                    <p class="text-light">Stay active with cutting‑edge equipment, free weights, and a dedicated yoga studio. Personal trainers available 24/7.</p>
+                    <ul class="list-unstyled text-muted">
+                        <li data-aos="fade-up" data-aos-delay="50"><i class="fas fa-check-circle text-gold me-1"></i> Latest Technogym machines</li>
+                        <li data-aos="fade-up" data-aos-delay="100"><i class="fas fa-check-circle text-gold me-1"></i> Group classes daily</li>
+                        <li data-aos="fade-up" data-aos-delay="150"><i class="fas fa-check-circle text-gold me-1"></i> Juice bar</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Service 6: Dry‑Cleaning & Laundry – image right, text left -->
+            <div class="row align-items-center mb-5 service-row" data-aos="fade-left">
+                <div class="col-md-6 order-md-2 mb-3 mb-md-0">
+                    <img src="https://images.unsplash.com/photo-1582653291997-079a1c04e5a1?w=600&h=400&fit=crop" class="img-fluid rounded-4 shadow service-img" alt="Laundry">
+                </div>
+                <div class="col-md-6 order-md-1">
+                    <h3 class="text-gold"><i class="fas fa-tshirt me-2"></i> Dry‑Cleaning &amp; Laundry</h3>
+                    <p class="text-light">Impeccable garment care with same‑day service. Your clothes are treated with the utmost attention.</p>
+                    <ul class="list-unstyled text-muted">
+                        <li data-aos="fade-up" data-aos-delay="50"><i class="fas fa-check-circle text-gold me-1"></i> Express service</li>
+                        <li data-aos="fade-up" data-aos-delay="100"><i class="fas fa-check-circle text-gold me-1"></i> Eco‑friendly cleaning</li>
+                        <li data-aos="fade-up" data-aos-delay="150"><i class="fas fa-check-circle text-gold me-1"></i> Repairs &amp; alterations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Service 7: Airport Shuttle – image left, text right -->
+            
         </div>
 
         <!-- Testimonials -->
