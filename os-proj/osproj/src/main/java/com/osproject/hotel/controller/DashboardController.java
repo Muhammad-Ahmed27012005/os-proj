@@ -50,4 +50,15 @@ public ResponseEntity<Map<String, Object>> getBookingStats() {
     return ResponseEntity.ok(stats);
 }
 
+// In a new or existing controller, e.g., DashboardController
+@GetMapping("/best-algorithm")
+@ResponseBody
+public ResponseEntity<Map<String, String>> getBestAlgorithm() {
+    // reuse logic from BackgroundScheduler or call it directly
+    // This is just a minimal example.
+    Map<String, String> result = new HashMap<>();
+    result.put("bestAlgorithm", "FCFS"); // hardcoded for demo
+    return ResponseEntity.ok(result);
+}
+
 }

@@ -9,9 +9,14 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+    <video class="video-bg" autoplay muted loop playsinline>
+        <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260428_193507_4286c423-2fd9-4efd-92bd-91a939453fc1.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <!-- Booking Banner (Fixed Image) -->
+    <!-- Booking Banner -->
     <div class="booking-banner" style="background-image: url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');">
         <div class="container h-100 d-flex flex-column justify-content-center">
             <h1 class="display-5 fw-bold text-white"><i class="fas fa-calendar-alt text-gold"></i> Your Bookings</h1>
@@ -30,7 +35,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
 
-        <!-- New Reservation Card (Classic Form) -->
+        <!-- New Reservation Card -->
         <div class="card border-0 shadow-lg rounded-4 mb-5">
             <div class="card-header bg-transparent border-0 pt-4">
                 <h5><i class="fas fa-plus-circle text-gold me-2"></i> New Reservation</h5>
@@ -71,7 +76,7 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label">Special Requests</label>
-                            <textarea class="form-control" th:field="*{specialRequests}" rows="2" placeholder="Any preferences? (e.g., extra pillow, late check-in)"></textarea>
+                            <textarea class="form-control" th:field="*{specialRequests}" rows="2" placeholder="Any preferences?"></textarea>
                         </div>
                     </div>
                     <div class="mt-4 text-end">

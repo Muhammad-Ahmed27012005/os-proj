@@ -9,6 +9,11 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+    <video class="video-bg" autoplay muted loop playsinline>
+        <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260520_133010_cb9c806d-bc9d-47f1-ac4c-b1759134ec8b.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
     <div class="container py-5">
@@ -27,7 +32,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
 
-        <!-- Add Room Form - Professional & Classic -->
+        <!-- Add Room Form -->
         <div class="card border-0 shadow-lg rounded-4 mb-5">
             <div class="card-header bg-transparent border-0 pt-4">
                 <h5><i class="fas fa-plus-circle text-gold me-2"></i> Add New Room</h5>
@@ -77,8 +82,6 @@
         <div class="row g-4">
             <div th:each="room : ${rooms}" class="col-md-6 col-lg-4">
                 <div class="room-card h-100">
-                    <!-- Using reliable Picsum images with different hotel-themed IDs -->
-                    <!-- IDs: 104 (lobby), 164 (cabin), 258 (city), 39 (lamp), 42 (piano), etc. -->
                     <div class="room-img" th:style="'background-image: url(\'https://picsum.photos/id/' + (${room.id} % 30 + 100) + '/400/240\');'">
                         <span class="room-badge" th:text="${room.roomType}"></span>
                     </div>
