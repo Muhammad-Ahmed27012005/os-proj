@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <video autoplay muted loop playsinline id="bgVideo">
@@ -27,69 +26,180 @@
     </div>
 
     <div class="container py-5">
-        <!-- Stats Cards -->
-        <div class="row g-4 mb-5">
-            <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
-                <div class="stat-card">
-                    <div class="d-flex justify-content-between">
-                        <div><h6 class="text-muted">Total Rooms</h6><h2 class="stat-number" th:text="${totalRooms}">0</h2></div>
-                        <i class="fas fa-door-open stat-icon text-primary"></i>
+
+        <!-- EXPLORE OUR SERVICES (now 2.5 s) -->
+        <div class="mb-5" data-aos="fade-up">
+            <h2 class="text-center mb-4"><i class="fas fa-compass text-gold"></i> Explore Our Services</h2>
+            <div id="servicesCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2500">
+                <div class="carousel-inner rounded-4 overflow-hidden">
+                    <div class="carousel-item active">
+                        <div class="row g-0">
+                            <div class="col-md-6">
+                                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=400&fit=crop" class="d-block w-100 h-100" style="object-fit: cover;" alt="Rooms">
+                            </div>
+                            <div class="col-md-6 d-flex align-items-center p-5" style="background: rgba(17,19,24,0.9);">
+                                <div>
+                                    <h3 class="text-gold"><i class="fas fa-bed me-2"></i> Luxurious Rooms</h3>
+                                    <p>Discover our elegantly designed rooms with breathtaking views. Manage, add, or book your perfect stay.</p>
+                                    <a href="/rooms" class="btn btn-outline-gold">View Rooms</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row g-0">
+                            <div class="col-md-6">
+                                <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=400&fit=crop" class="d-block w-100 h-100" style="object-fit: cover;" alt="Bookings">
+                            </div>
+                            <div class="col-md-6 d-flex align-items-center p-5" style="background: rgba(17,19,24,0.9);">
+                                <div>
+                                    <h3 class="text-gold"><i class="fas fa-calendar-check me-2"></i> Seamless Bookings</h3>
+                                    <p>Create, manage, and track reservations with ease. Your perfect stay starts here.</p>
+                                    <a href="/bookings" class="btn btn-outline-gold">Manage Bookings</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row g-0">
+                            <div class="col-md-6">
+                                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=400&fit=crop" class="d-block w-100 h-100" style="object-fit: cover;" alt="Analytics">
+                            </div>
+                            <div class="col-md-6 d-flex align-items-center p-5" style="background: rgba(17,19,24,0.9);">
+                                <div>
+                                    <h3 class="text-gold"><i class="fas fa-chart-pie me-2"></i> Business Analytics</h3>
+                                    <p>Monitor occupancy, revenue, and performance metrics in real time.</p>
+                                    <a href="/analytics" class="btn btn-outline-gold">View Analytics</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#servicesCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#servicesCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
             </div>
-            <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
-                <div class="stat-card">
-                    <div class="d-flex justify-content-between">
-                        <div><h6 class="text-muted">Available</h6><h2 class="stat-number" th:text="${availableRooms}">0</h2></div>
-                        <i class="fas fa-bed stat-icon text-success"></i>
+        </div>
+
+        <!-- EXCELLENCE EXPERIENCE (now 2.5 s) -->
+        <div class="mb-5" data-aos="fade-up" data-aos-delay="200">
+            <h2 class="text-center mb-4"><i class="fas fa-star text-gold"></i> Excellence Experience</h2>
+            <div id="excellenceCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2500">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row g-3">
+                            <div class="col-md-4"><div class="card"><img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=500&h=300&fit=crop" class="card-img-top" alt="Spa"></div></div>
+                            <div class="col-md-4"><div class="card"><img src="https://images.unsplash.com/photo-1563911302283-d2bc129e7570?w=500&h=300&fit=crop" class="card-img-top" alt="Concierge"></div></div>
+                            <div class="col-md-4"><div class="card"><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=500&h=300&fit=crop" class="card-img-top" alt="Suite"></div></div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row g-3">
+                            <div class="col-md-4"><div class="card"><img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=500&h=300&fit=crop" class="card-img-top" alt="Pool"></div></div>
+                            <div class="col-md-4"><div class="card"><img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500&h=300&fit=crop" class="card-img-top" alt="Lobby"></div></div>
+                            <div class="col-md-4"><div class="card"><img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=500&h=300&fit=crop" class="card-img-top" alt="Terrace"></div></div>
+                        </div>
                     </div>
                 </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#excellenceCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#excellenceCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
             </div>
-            <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
-                <div class="stat-card">
-                    <div class="d-flex justify-content-between">
-                        <div><h6 class="text-muted">Bookings</h6><h2 class="stat-number" th:text="${totalBookings}">0</h2></div>
-                        <i class="fas fa-calendar-check stat-icon text-warning"></i>
+        </div>
+
+        <!-- OUR AMENITIES (static grid, no carousel) -->
+        <div class="mb-5" data-aos="fade-up" data-aos-delay="300">
+            <h2 class="text-center mb-4"><i class="fas fa-concierge-bell text-gold"></i> Our Amenities</h2>
+            <div class="row g-4">
+                <div class="col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="card text-center p-4">
+                        <i class="fas fa-wifi fa-2x text-gold mb-3"></i>
+                        <h5>High‑Speed WiFi</h5>
+                        <p class="text-muted">Stay connected anywhere in the hotel.</p>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
-                <div class="stat-card">
-                    <div class="d-flex justify-content-between">
-                        <div><h6 class="text-muted">Pending Tasks</h6><h2 class="stat-number" th:text="${pendingTasks}">0</h2></div>
-                        <i class="fas fa-tasks stat-icon text-info"></i>
+                <div class="col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="150">
+                    <div class="card text-center p-4">
+                        <i class="fas fa-swimming-pool fa-2x text-gold mb-3"></i>
+                        <h5>Infinity Pool</h5>
+                        <p class="text-muted">Relax with a view that stretches forever.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="card text-center p-4">
+                        <i class="fas fa-dumbbell fa-2x text-gold mb-3"></i>
+                        <h5>Fitness Center</h5>
+                        <p class="text-muted">State‑of‑the‑art equipment 24/7.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="250">
+                    <div class="card text-center p-4">
+                        <i class="fas fa-spa fa-2x text-gold mb-3"></i>
+                        <h5>Spa &amp; Wellness</h5>
+                        <p class="text-muted">Rejuvenate mind and body.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="card text-center p-4">
+                        <i class="fas fa-concierge-bell fa-2x text-gold mb-3"></i>
+                        <h5>24/7 Concierge</h5>
+                        <p class="text-muted">Personalised assistance any time.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="350">
+                    <div class="card text-center p-4">
+                        <i class="fas fa-parking fa-2x text-gold mb-3"></i>
+                        <h5>Valet Parking</h5>
+                        <p class="text-muted">Luxury service from the moment you arrive.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Chart & Recent -->
-        <div class="row g-4 mb-5">
-            <div class="col-md-7" data-aos="fade-right">
-                <div class="card h-100 border-0 shadow-sm rounded-4">
-                    <div class="card-header bg-transparent border-0 pt-4">
-                        <h5><i class="fas fa-chart-line text-gold"></i> Booking Trends</h5>
+        <!-- DINING (now 2.5 s) -->
+        <div class="mb-5" data-aos="fade-up" data-aos-delay="400">
+            <h2 class="text-center mb-4"><i class="fas fa-utensils text-gold"></i> Exquisite Dining</h2>
+            <div id="diningCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2500">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="card"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Signature Steak</h5><p class="text-muted">Aged to perfection</p></div></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card"><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Garden Salad</h5><p class="text-muted">Farm fresh ingredients</p></div></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card"><img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Artisan Bread</h5><p class="text-muted">Baked daily</p></div></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <canvas id="bookingChart" style="height: 260px;"></canvas>
+                    <div class="carousel-item">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="card"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Lobster Bisque</h5><p class="text-muted">Rich &amp; creamy</p></div></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Grilled Salmon</h5><p class="text-muted">With seasonal vegetables</p></div></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card"><img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500&h=300&fit=crop" class="card-img-top"><div class="card-body"><h5 class="text-gold">Crème Brûlée</h5><p class="text-muted">Classic dessert</p></div></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-5" data-aos="fade-left">
-                <div class="card h-100 border-0 shadow-sm rounded-4">
-                    <div class="card-header bg-transparent border-0 pt-4">
-                        <h5><i class="fas fa-clock text-gold"></i> Recent Bookings</h5>
-                    </div>
-                    <div class="card-body p-0">
-                        <ul class="list-group list-group-flush">
-                            <li th:each="b : ${recentBookings}" class="list-group-item d-flex justify-content-between align-items-center">
-                                <div><strong th:text="${b.guestName}"></strong><br><small th:text="${b.room.roomNumber}"></small></div>
-                                <span class="badge" th:classappend="${b.status == 'CONFIRMED'} ? 'bg-success' : 'bg-secondary'" th:text="${b.status}"></span>
-                            </li>
-                            <li th:if="${recentBookings.isEmpty()}" class="list-group-item text-center">No recent bookings</li>
-                        </ul>
-                    </div>
-                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#diningCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#diningCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
             </div>
         </div>
 
@@ -162,26 +272,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script th:src="@{/js/script.js}"></script>
-    <script>
-        fetch('/bookings/recent-stats')
-            .then(res => res.json())
-            .then(data => {
-                new Chart(document.getElementById('bookingChart'), {
-                    type: 'line',
-                    data: {
-                        labels: data.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                        datasets: [{
-                            label: 'Bookings',
-                            data: data.values || [12, 19, 15, 17, 14, 23],
-                            borderColor: '#C5A55A',
-                            backgroundColor: 'rgba(197,165,90,0.1)',
-                            tension: 0.3,
-                            fill: true
-                        }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: true }
-                });
-            });
-    </script>
 </body>
 </html>
